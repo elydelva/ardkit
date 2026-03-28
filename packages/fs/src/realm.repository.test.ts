@@ -136,9 +136,271 @@ describe("FsRealmRepository", () => {
       expect(exists).toBe(true);
     });
 
-    it("findTraces returns empty array (v0.1)", async () => {
+    it("findTraces returns empty when no ADRs exist", async () => {
       const traces = await repo.findTraces({});
       expect(traces).toEqual([]);
+    });
+
+    it("findTraces returns all traces across all ADRs", async () => {
+      const adr1 = ADR.create({ id: ADRId.from("ADR-0001"), title: "A1", author: "alice" });
+      const adr2 = ADR.create({ id: ADRId.from("ADR-0002"), title: "A2", author: "bob" });
+      await repo.saveADR(adr1);
+      await repo.saveADR(adr2);
+
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId: adr1.id,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId: adr2.id,
+          actor: "bob",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+
+      const traces = await repo.findTraces({});
+      expect(traces).toHaveLength(2);
+    });
+
+    it("findTraces scoped to an ADR only returns that ADR's traces", async () => {
+      const adr1 = ADR.create({ id: ADRId.from("ADR-0001"), title: "A1", author: "alice" });
+      const adr2 = ADR.create({ id: ADRId.from("ADR-0002"), title: "A2", author: "bob" });
+      await repo.saveADR(adr1);
+      await repo.saveADR(adr2);
+
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId: adr1.id,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId: adr2.id,
+          actor: "bob",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+
+      const traces = await repo.findTraces({ adrId: adr1.id });
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.adrId.toString()).toBe("ADR-0001");
+    });
+
+    it("findTraces filters by actor", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      await repo.saveADR(adr);
+
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId,
+          actor: "bot",
+          actorType: "agent",
+          event: "task_created",
+        })
+      );
+
+      const traces = await repo.findTraces({ actor: "alice" });
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.actor).toBe("alice");
+    });
+
+    it("findTraces filters by event", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      await repo.saveADR(adr);
+
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "task_completed",
+        })
+      );
+
+      const traces = await repo.findTraces({ event: "task_completed" });
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.event).toBe("task_completed");
+    });
+
+    it("findTraces filters by taskId", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      const taskId = TaskId.from("TASK-0001");
+      await repo.saveADR(adr);
+
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId,
+          taskId,
+          actor: "alice",
+          actorType: "human",
+          event: "task_completed",
+        })
+      );
+
+      const traces = await repo.findTraces({ taskId });
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.taskId?.toString()).toBe("TASK-0001");
+    });
+
+    it("findTraces filters by since", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      await repo.saveADR(adr);
+
+      const past = Trace.create({
+        id: TraceId.from("TRACE-0001"),
+        adrId,
+        actor: "alice",
+        actorType: "human",
+        event: "adr_created",
+      });
+      // Manually set an older timestamp by writing the file directly
+      const tracesDir = path.join(tempDir, ".adrkit", "ADR-0001", "traces");
+      await fs.mkdir(tracesDir, { recursive: true });
+      const oldContent = `---\nid: TRACE-0001\nadrId: ADR-0001\ntaskId: null\nat: '2020-01-01T00:00:00.000Z'\nactor: alice\nactorType: human\nevent: adr_created\nref: null\nfrom: null\nto: null\n---\n`;
+      await fs.writeFile(path.join(tracesDir, "TRACE-0001.md"), oldContent, "utf-8");
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "task_created",
+        })
+      );
+
+      const since = new Date("2023-01-01");
+      const traces = await repo.findTraces({ since });
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.id.toString()).toBe("TRACE-0002");
+    });
+
+    it("findTraces skips non-.md files in traces dir", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      await repo.saveADR(adr);
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0001"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "adr_created",
+        })
+      );
+      // Write a non-.md file in traces dir
+      const tracesDir = path.join(tempDir, ".adrkit", "ADR-0001", "traces");
+      await fs.writeFile(path.join(tracesDir, ".DS_Store"), "junk", "utf-8");
+
+      const traces = await repo.findTraces({});
+      expect(traces).toHaveLength(1);
+    });
+
+    it("findTraces skips malformed trace files", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      await repo.saveADR(adr);
+
+      const tracesDir = path.join(tempDir, ".adrkit", "ADR-0001", "traces");
+      await fs.mkdir(tracesDir, { recursive: true });
+      await fs.writeFile(path.join(tracesDir, "TRACE-0001.md"), "---\nid: BAD_ID\n---\n", "utf-8");
+      await repo.appendTrace(
+        Trace.create({
+          id: TraceId.from("TRACE-0002"),
+          adrId,
+          actor: "alice",
+          actorType: "human",
+          event: "task_created",
+        })
+      );
+
+      const traces = await repo.findTraces({});
+      expect(traces).toHaveLength(1);
+      expect(traces[0]?.id.toString()).toBe("TRACE-0002");
+    });
+
+    it("findTraces returns empty when adrId filter matches no ADR", async () => {
+      const traces = await repo.findTraces({ adrId: ADRId.from("ADR-0099") });
+      expect(traces).toEqual([]);
+    });
+
+    it("appendTrace and findTraces round-trip all fields", async () => {
+      const adrId = ADRId.from("ADR-0001");
+      const adr = ADR.create({ id: adrId, title: "A", author: "alice" });
+      const taskId = TaskId.from("TASK-0001");
+      await repo.saveADR(adr);
+
+      const original = Trace.create({
+        id: TraceId.from("TRACE-0001"),
+        adrId,
+        taskId,
+        actor: "agent-007",
+        actorType: "agent",
+        event: "task_completed",
+        ref: "sha-abc",
+        from: "in-progress",
+        to: "completed",
+        body: "Completed by agent",
+      });
+      await repo.appendTrace(original);
+
+      const [found] = await repo.findTraces({});
+      expect(found?.id.toString()).toBe("TRACE-0001");
+      expect(found?.taskId?.toString()).toBe("TASK-0001");
+      expect(found?.actor).toBe("agent-007");
+      expect(found?.actorType).toBe("agent");
+      expect(found?.event).toBe("task_completed");
+      expect(found?.ref).toBe("sha-abc");
+      expect(found?.from).toBe("in-progress");
+      expect(found?.to).toBe("completed");
+      expect(found?.body).toBe("Completed by agent");
     });
   });
 });
