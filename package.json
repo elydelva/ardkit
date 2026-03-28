@@ -24,7 +24,7 @@
     "commander": "^13.0.0"
   },
   "scripts": {
-    "build": "bun run --filter './packages/*' build",
+    "build": "bun run --filter '@adrkit/core' build && bun run --filter './packages/fs' build && bun run --filter './packages/git' build && bun run --filter './packages/lint' build && bun run --filter './packages/tui' build && bun run --filter './packages/sync' build && bun run --filter './packages/adrkit' build",
     "build:bin": "bun build packages/adrkit/src/index.ts --compile --outfile dist/adrkit --target bun",
     "test": "bun test --coverage",
     "test:watch": "bun test --watch",
