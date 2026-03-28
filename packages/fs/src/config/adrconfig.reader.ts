@@ -1,6 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import yaml from "js-yaml";
+import { CONFIG_FILE } from "../constants.js";
 
 export interface ADRConfig {
   idFormat: string;
@@ -15,7 +16,7 @@ const DEFAULT_CONFIG: ADRConfig = {
 };
 
 export async function readADRConfig(realmRoot: string): Promise<ADRConfig> {
-  const configPath = path.join(realmRoot, ".adrconfig");
+  const configPath = path.join(realmRoot, CONFIG_FILE);
   try {
     const raw = await fs.readFile(configPath, "utf-8");
     const parsed = yaml.load(raw);
@@ -37,6 +38,6 @@ export async function readADRConfig(realmRoot: string): Promise<ADRConfig> {
 }
 
 export async function writeADRConfig(realmRoot: string, config: ADRConfig): Promise<void> {
-  const configPath = path.join(realmRoot, ".adrconfig");
+  const configPath = path.join(realmRoot, CONFIG_FILE);
   await fs.writeFile(configPath, yaml.dump(config), "utf-8");
 }

@@ -12,28 +12,33 @@ import type {
 } from "@adrkit/core";
 import type { ADRId, TaskId } from "@adrkit/core";
 import { getState, incrementCounter } from "./config/state.manager.js";
+import { ADRKIT_DIR, MD_EXT, TASKS_DIR, TRACES_DIR } from "./constants.js";
 import { parseADR } from "./parsers/adr.parser.js";
 import { parseTask } from "./parsers/task.parser.js";
 import { serializeADR } from "./serializers/adr.serializer.js";
 import { serializeTask } from "./serializers/task.serializer.js";
 import { serializeTrace } from "./serializers/trace.serializer.js";
 
-const ADRKIT_DIR = ".adrkit";
-
 function adrDirName(id: ADRId): string {
   return id.toString();
 }
 
 function adrFilePath(realmRoot: string, id: ADRId): string {
-  return path.join(realmRoot, ADRKIT_DIR, adrDirName(id), `${id.toString()}.md`);
+  return path.join(realmRoot, ADRKIT_DIR, adrDirName(id), `${id.toString()}${MD_EXT}`);
 }
 
 function taskFilePath(realmRoot: string, adrId: ADRId, taskId: TaskId): string {
-  return path.join(realmRoot, ADRKIT_DIR, adrDirName(adrId), "tasks", `${taskId.toString()}.md`);
+  return path.join(
+    realmRoot,
+    ADRKIT_DIR,
+    adrDirName(adrId),
+    TASKS_DIR,
+    `${taskId.toString()}${MD_EXT}`
+  );
 }
 
 function traceFilePath(realmRoot: string, adrId: ADRId, traceId: string): string {
-  return path.join(realmRoot, ADRKIT_DIR, adrDirName(adrId), "traces", `${traceId}.md`);
+  return path.join(realmRoot, ADRKIT_DIR, adrDirName(adrId), TRACES_DIR, `${traceId}${MD_EXT}`);
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -74,7 +79,7 @@ export class FsRealmRepository implements IRealmRepository {
 
     for (const entry of entries) {
       if (!entry.startsWith("ADR-")) continue;
-      const mdPath = path.join(this.adrKitDir, entry, `${entry}.md`);
+      const mdPath = path.join(this.adrKitDir, entry, `${entry}${MD_EXT}`);
       if (!(await fileExists(mdPath))) continue;
       try {
         const content = await fs.readFile(mdPath, "utf-8");
@@ -109,7 +114,7 @@ export class FsRealmRepository implements IRealmRepository {
   }
 
   async findTasksForADR(adrId: ADRId): Promise<Task[]> {
-    const tasksDir = path.join(this.adrKitDir, adrDirName(adrId), "tasks");
+    const tasksDir = path.join(this.adrKitDir, adrDirName(adrId), TASKS_DIR);
     const tasks: Task[] = [];
     let entries: string[];
     try {
@@ -119,7 +124,7 @@ export class FsRealmRepository implements IRealmRepository {
     }
 
     for (const entry of entries) {
-      if (!entry.endsWith(".md")) continue;
+      if (!entry.endsWith(MD_EXT)) continue;
       const filePath = path.join(tasksDir, entry);
       try {
         const content = await fs.readFile(filePath, "utf-8");

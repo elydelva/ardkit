@@ -1,6 +1,13 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
-import { writeADRConfig } from "@adrkit/fs";
+import {
+  ADRKIT_DIR,
+  CONFIG_FILE,
+  MD_EXT,
+  STATE_FILE,
+  TEMPLATES_DIR,
+  writeADRConfig,
+} from "@adrkit/fs";
 
 const ADR_TEMPLATE = `---
 id: "{{id}}"
@@ -47,23 +54,23 @@ rules: []
 `;
 
 export async function runInit(realmRoot: string): Promise<void> {
-  const adrKitDir = path.join(realmRoot, ".adrkit");
-  const templatesDir = path.join(adrKitDir, "templates");
+  const adrKitDir = path.join(realmRoot, ADRKIT_DIR);
+  const templatesDir = path.join(adrKitDir, TEMPLATES_DIR);
 
   await fs.mkdir(adrKitDir, { recursive: true });
   await fs.mkdir(templatesDir, { recursive: true });
 
-  const stateFile = path.join(adrKitDir, ".ardstate");
+  const stateFile = path.join(adrKitDir, STATE_FILE);
   try {
     await fs.access(stateFile);
   } catch {
     await fs.writeFile(stateFile, JSON.stringify({ adr: 0, task: 0, trace: 0 }, null, 2), "utf-8");
   }
 
-  await fs.writeFile(path.join(templatesDir, "adr.md"), ADR_TEMPLATE, "utf-8");
-  await fs.writeFile(path.join(templatesDir, "task.md"), TASK_TEMPLATE, "utf-8");
+  await fs.writeFile(path.join(templatesDir, `adr${MD_EXT}`), ADR_TEMPLATE, "utf-8");
+  await fs.writeFile(path.join(templatesDir, `task${MD_EXT}`), TASK_TEMPLATE, "utf-8");
 
-  const configPath = path.join(realmRoot, ".adrconfig");
+  const configPath = path.join(realmRoot, CONFIG_FILE);
   try {
     await fs.access(configPath);
     console.log("✓ .adrconfig already exists, skipping");
@@ -75,11 +82,11 @@ export async function runInit(realmRoot: string): Promise<void> {
     });
   }
 
-  console.log("✓ Initialized .adrkit/");
-  console.log("  .adrkit/.ardstate");
-  console.log("  .adrkit/templates/adr.md");
-  console.log("  .adrkit/templates/task.md");
-  console.log("  .adrconfig");
+  console.log(`✓ Initialized ${ADRKIT_DIR}/`);
+  console.log(`  ${ADRKIT_DIR}/${STATE_FILE}`);
+  console.log(`  ${ADRKIT_DIR}/${TEMPLATES_DIR}/adr${MD_EXT}`);
+  console.log(`  ${ADRKIT_DIR}/${TEMPLATES_DIR}/task${MD_EXT}`);
+  console.log(`  ${CONFIG_FILE}`);
   console.log("");
   console.log('Next: adrkit new --title "My first ADR" --type tech-choice');
 }
