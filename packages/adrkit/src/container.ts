@@ -3,6 +3,7 @@ import {
   CreateADRUseCase,
   CreateTaskUseCase,
   GetContextUseCase,
+  GetHistoryUseCase,
   GetNextUseCase,
   type IRealmRepository,
 } from "@adrkit/core";
@@ -17,6 +18,7 @@ export interface Container {
   completeTask: CompleteTaskUseCase;
   getNext: GetNextUseCase;
   getContext: GetContextUseCase;
+  getHistory: GetHistoryUseCase;
 }
 
 export function createContainer(realmRoot: string): Container {
@@ -31,5 +33,6 @@ export function createContainer(realmRoot: string): Container {
     completeTask: new CompleteTaskUseCase(repo),
     getNext: new GetNextUseCase(repo),
     getContext: new GetContextUseCase(repo),
+    getHistory: new GetHistoryUseCase(repo),
   };
 }
