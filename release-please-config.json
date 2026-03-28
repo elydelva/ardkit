@@ -14,12 +14,12 @@
     { "type": "ci", "section": "CI/CD", "hidden": true }
   ],
   "packages": {
-    "packages/core":   { "release-type": "node", "component": "core" },
-    "packages/fs":     { "release-type": "node", "component": "fs" },
-    "packages/git":    { "release-type": "node", "component": "git" },
-    "packages/lint":   { "release-type": "node", "component": "lint" },
-    "packages/tui":    { "release-type": "node", "component": "tui" },
-    "packages/sync":   { "release-type": "node", "component": "sync" },
+    "packages/core": { "release-type": "node", "component": "core" },
+    "packages/fs": { "release-type": "node", "component": "fs" },
+    "packages/git": { "release-type": "node", "component": "git" },
+    "packages/lint": { "release-type": "node", "component": "lint" },
+    "packages/tui": { "release-type": "node", "component": "tui" },
+    "packages/sync": { "release-type": "node", "component": "sync" },
     "packages/adrkit": { "release-type": "node", "component": "adrkit" }
   },
   "plugins": [
