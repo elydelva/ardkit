@@ -1,30 +1,31 @@
+import { spawn } from "node:child_process";
 import type { IGitAdapter } from "@adrkit/core";
 import { GitCommandError } from "./errors/index.js";
+
+function run(args: string[]): Promise<{ exitCode: number; stderr: string }> {
+  return new Promise((resolve) => {
+    const stderrChunks: Buffer[] = [];
+    const proc = spawn("git", args, { stdio: ["ignore", "ignore", "pipe"] });
+    proc.stderr.on("data", (chunk: Buffer) => stderrChunks.push(chunk));
+    proc.on("close", (code) => {
+      resolve({ exitCode: code ?? 1, stderr: Buffer.concat(stderrChunks).toString() });
+    });
+  });
+}
 
 export class GitAdapter implements IGitAdapter {
   async stage(paths: string[]): Promise<void> {
     if (paths.length === 0) return;
 
-    const proc = Bun.spawn(["git", "add", "--", ...paths], {
-      stdout: "ignore",
-      stderr: "pipe",
-    });
-
-    const exitCode = await proc.exited;
+    const { exitCode, stderr } = await run(["add", "--", ...paths]);
 
     if (exitCode !== 0) {
-      const stderrText = await new Response(proc.stderr).text();
-      throw new GitCommandError(`git add -- ${paths.join(" ")}`, exitCode, stderrText);
+      throw new GitCommandError(`git add -- ${paths.join(" ")}`, exitCode, stderr);
     }
   }
 
   async isRepo(): Promise<boolean> {
-    const proc = Bun.spawn(["git", "rev-parse", "--is-inside-work-tree"], {
-      stdout: "ignore",
-      stderr: "ignore",
-    });
-
-    const exitCode = await proc.exited;
+    const { exitCode } = await run(["rev-parse", "--is-inside-work-tree"]);
     return exitCode === 0;
   }
 }
