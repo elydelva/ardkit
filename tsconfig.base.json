@@ -18,12 +18,12 @@
     "noEmit": false,
     "types": ["bun-types"],
     "paths": {
-      "@adrkit/core":  ["./packages/core/src/index.ts"],
-      "@adrkit/fs":    ["./packages/fs/src/index.ts"],
-      "@adrkit/git":   ["./packages/git/src/index.ts"],
-      "@adrkit/lint":  ["./packages/lint/src/index.ts"],
-      "@adrkit/tui":   ["./packages/tui/src/index.ts"],
-      "@adrkit/sync":  ["./packages/sync/src/index.ts"]
+      "@adrkit/core": ["./packages/core/src/index.ts"],
+      "@adrkit/fs": ["./packages/fs/src/index.ts"],
+      "@adrkit/git": ["./packages/git/src/index.ts"],
+      "@adrkit/lint": ["./packages/lint/src/index.ts"],
+      "@adrkit/tui": ["./packages/tui/src/index.ts"],
+      "@adrkit/sync": ["./packages/sync/src/index.ts"]
     }
   },
   "include": ["packages/*/src"],

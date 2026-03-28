@@ -13,7 +13,19 @@
   },
   "ignoreDependencies": [
     "bun-types",
-    "typescript"
+    "typescript",
+    "@adrkit/core",
+    "@adrkit/fs",
+    "@adrkit/git",
+    "@adrkit/lint",
+    "@adrkit/tui",
+    "@adrkit/sync",
+    "commander",
+    "gray-matter",
+    "js-yaml",
+    "ink",
+    "react",
+    "@types/react"
   ],
   "ignoreExportsUsedInFile": true
 }
