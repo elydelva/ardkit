@@ -1,0 +1,30 @@
+{
+  "name": "@adrkit/sync",
+  "version": "0.0.0",
+  "private": true,
+  "description": "ADRKit sync adapters — Linear, GitHub",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@adrkit/core": "workspace:*",
+    "@adrkit/fs": "workspace:*",
+    "@adrkit/git": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

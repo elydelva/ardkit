@@ -1,0 +1,49 @@
+name: Feature Request
+description: Propose a new feature or improvement
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening, check if a related ADR already exists in the codebase.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: What problem are you trying to solve? Why does it matter?
+    validations:
+      required: true
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should the feature do? How would it behave?
+    validations:
+      required: true
+
+  - type: textarea
+    id: tasks
+    attributes:
+      label: Tasks
+      description: Optional breakdown of work.
+      placeholder: |
+        - [ ] Task 1
+        - [ ] Task 2
+
+  - type: input
+    id: adr
+    attributes:
+      label: Related ADR
+      description: Link to an existing ADR if applicable.
+      placeholder: e.g. ADR-0003
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: How do we know this is done?
+      placeholder: |
+        - `adrkit X --flag` returns Y
+        - Trace file is created with event Z

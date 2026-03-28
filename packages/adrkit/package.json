@@ -1,0 +1,38 @@
+{
+  "name": "adrkit",
+  "version": "0.1.0",
+  "description": "Decision-first, agent-native project management system for git repositories",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elydelva/adrkit.git"
+  },
+  "keywords": ["adr", "architecture", "decision-record", "cli", "agent", "git"],
+  "bin": {
+    "adrkit": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "bun run typecheck && bun run build && bun test"
+  },
+  "files": ["dist", "README.md"],
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@adrkit/core": "workspace:*",
+    "@adrkit/fs": "workspace:*",
+    "@adrkit/git": "workspace:*",
+    "@adrkit/lint": "workspace:*",
+    "@adrkit/tui": "workspace:*",
+    "@adrkit/sync": "workspace:*",
+    "commander": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:"
+  }
+}

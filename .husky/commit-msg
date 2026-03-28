@@ -1,0 +1,18 @@
+# Enforce Conventional Commits format
+# Pattern: type(scope)!: description  OR  type!: description
+commit_msg=$(cat "$1")
+pattern='^(feat|fix|docs|chore|refactor|perf|test|ci|revert|deps)(\([a-z0-9/-]+\))?(!)?: .{1,100}'
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo ""
+  echo "[adrkit] Commit message does not follow Conventional Commits format."
+  echo ""
+  echo "  Expected: type(scope): description"
+  echo "  Examples: feat(core): add state machine"
+  echo "            fix(fs): handle missing frontmatter"
+  echo "            chore: update dependencies"
+  echo ""
+  echo "  Types: feat | fix | docs | chore | refactor | perf | test | ci | revert | deps"
+  echo ""
+  exit 1
+fi
