@@ -26,9 +26,9 @@ export function createContainer(realmRoot: string): Container {
   return {
     realmRoot,
     repo,
-    createADR: new CreateADRUseCase(repo, git),
-    createTask: new CreateTaskUseCase(repo, git),
-    completeTask: new CompleteTaskUseCase(repo, git),
+    createADR: new CreateADRUseCase(repo),
+    createTask: new CreateTaskUseCase(repo),
+    completeTask: new CompleteTaskUseCase(repo),
     getNext: new GetNextUseCase(repo),
     getContext: new GetContextUseCase(repo),
   };
