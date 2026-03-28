@@ -8,7 +8,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "jq -r '.worktree_path + \" \" + .branch' | { read -r path branch; git worktree add \"$path\" -b \"$branch\" HEAD; }",
+            "command": "jq -r '[.worktree_path, (.branch // \"\")] | join(\" \")' | { read -r path branch; branch=\"${branch:-agent/$(basename \"$path\")}\"; git worktree add \"$path\" -b \"$branch\" HEAD; }",
             "timeout": 30
           }
         ]

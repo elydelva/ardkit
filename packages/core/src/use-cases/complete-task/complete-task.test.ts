@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it } from "bun:test";
 import { ADR, Task } from "../../entities/index.js";
 import type { Trace } from "../../entities/index.js";
 import {
+  ADRNotFoundError,
   GatesNotClearedError,
   InvalidTransitionError,
   TaskNotFoundError,
@@ -50,6 +51,14 @@ function makeInMemoryRepo(): IRealmRepository & {
     },
   };
 }
+
+describe("ADRNotFoundError", () => {
+  it("includes the id in the message", () => {
+    const err = new ADRNotFoundError("ADR-0001");
+    expect(err.message).toContain("ADR-0001");
+    expect(err.name).toBe("ADRNotFoundError");
+  });
+});
 
 describe("CompleteTaskUseCase", () => {
   let repo: ReturnType<typeof makeInMemoryRepo>;
