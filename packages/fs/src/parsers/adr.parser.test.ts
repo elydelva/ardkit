@@ -36,14 +36,34 @@ describe("parseADR", () => {
   });
 
   it("defaults missing fields gracefully", () => {
-    const content = `---
-id: ADR-0001
----
-`;
+    const content = "---\nid: ADR-0001\n---\n";
     const adr = parseADR(content);
     expect(adr.status).toBe("draft");
     expect(adr.tags).toEqual([]);
     expect(adr.dependsOn).toEqual([]);
+  });
+
+  it("parses dependsOn, relatedTo and conflictsWith as ADRId arrays", () => {
+    const content =
+      "---\nid: ADR-0002\ndependsOn: [ADR-0001]\nrelatedTo: [ADR-0001]\nconflictsWith: [ADR-0001]\n---\n";
+    const adr = parseADR(content);
+    expect(adr.dependsOn).toHaveLength(1);
+    expect(adr.relatedTo).toHaveLength(1);
+    expect(adr.conflictsWith).toHaveLength(1);
+  });
+
+  it("parses supersedes when set", () => {
+    const content = "---\nid: ADR-0002\nsupersedes: ADR-0001\n---\n";
+    const adr = parseADR(content);
+    expect(adr.supersedes?.toString()).toBe("ADR-0001");
+  });
+
+  it("parses rules array", () => {
+    const content =
+      "---\nid: ADR-0003\nrules:\n  - trigger: before_edit\n    instruction: do something\n---\n";
+    const adr = parseADR(content);
+    expect(adr.rules).toHaveLength(1);
+    expect(adr.rules[0]?.trigger).toBe("before_edit");
   });
 });
 
