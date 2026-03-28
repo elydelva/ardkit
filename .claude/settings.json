@@ -1,0 +1,29 @@
+{
+  "worktree": {
+    "symlinkDirectories": ["node_modules"]
+  },
+  "hooks": {
+    "WorktreeCreate": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.worktree_path + \" \" + .branch' | { read -r path branch; git worktree add \"$path\" -b \"$branch\" HEAD; }",
+            "timeout": 30
+          }
+        ]
+      }
+    ],
+    "WorktreeRemove": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.worktree_path' | { read -r path; git worktree remove \"$path\" --force; }",
+            "timeout": 30
+          }
+        ]
+      }
+    ]
+  }
+}
