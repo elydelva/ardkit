@@ -53,7 +53,7 @@ export async function runInit(realmRoot: string): Promise<void> {
   await fs.mkdir(adrKitDir, { recursive: true });
   await fs.mkdir(templatesDir, { recursive: true });
 
-  const stateFile = path.join(adrKitDir, ".state");
+  const stateFile = path.join(adrKitDir, ".ardstate");
   try {
     await fs.access(stateFile);
   } catch {
@@ -76,7 +76,7 @@ export async function runInit(realmRoot: string): Promise<void> {
   }
 
   console.log("✓ Initialized .adrkit/");
-  console.log("  .adrkit/.state");
+  console.log("  .adrkit/.ardstate");
   console.log("  .adrkit/templates/adr.md");
   console.log("  .adrkit/templates/task.md");
   console.log("  .adrconfig");
