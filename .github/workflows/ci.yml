@@ -30,7 +30,7 @@ jobs:
       - name: Lint
         run: bun run lint
       - name: Format check
-        run: biome format .
+        run: bunx biome format .
 
   typecheck:
     name: Type Check
