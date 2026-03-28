@@ -2,7 +2,7 @@ import * as fs from "node:fs/promises";
 import * as path from "node:path";
 import type { CounterKey, RealmState } from "@adrkit/core";
 
-const STATE_FILE = ".state";
+const STATE_FILE = ".ardstate";
 
 function stateFilePath(realmRoot: string): string {
   return path.join(realmRoot, ".adrkit", STATE_FILE);
