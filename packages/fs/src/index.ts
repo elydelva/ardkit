@@ -14,6 +14,7 @@ export { getState, incrementCounter } from "./config/state.manager.js";
 export { parseFrontmatter, stringifyFrontmatter } from "./parsers/frontmatter.parser.js";
 export { parseADR } from "./parsers/adr.parser.js";
 export { parseTask } from "./parsers/task.parser.js";
+export { parseTrace } from "./parsers/trace.parser.js";
 export { serializeADR } from "./serializers/adr.serializer.js";
 export { serializeTask } from "./serializers/task.serializer.js";
 export { serializeTrace } from "./serializers/trace.serializer.js";
