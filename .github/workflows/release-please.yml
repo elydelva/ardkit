@@ -20,7 +20,7 @@ jobs:
       releases_created: ${{ steps.release.outputs.releases_created }}
       adrkit_version: ${{ steps.release.outputs['packages/adrkit--tag_name'] }}
     steps:
-      - uses: googleapis/release-please-action@a02a34c4d625b9b9cc3f5a7a7d74f5e2da37f430 # v4
+      - uses: googleapis/release-please-action@v4
         id: release
         with:
           config-file: release-please-config.json
