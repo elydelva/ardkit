@@ -1,7 +1,7 @@
-import type { ADR } from "../entities/adr.js";
-import type { Task } from "../entities/task.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import { DAGService } from "../services/dag.service.js";
+import type { ADR } from "../../entities/index.js";
+import type { Task } from "../../entities/index.js";
+import type { IRealmRepository } from "../../ports/index.js";
+import { DAGService } from "../../services/index.js";
 
 export interface NextResult {
   task: Task;

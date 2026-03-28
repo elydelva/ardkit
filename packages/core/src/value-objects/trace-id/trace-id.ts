@@ -1,4 +1,4 @@
-import { InvalidIdError } from "../errors.js";
+import { InvalidIdError } from "../../errors/errors.js";
 
 const TRACE_ID_REGEX = /^TRACE-\d{4}$/;
 

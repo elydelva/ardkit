@@ -1,8 +1,8 @@
 import { describe, expect, it } from "bun:test";
-import { ADR } from "../entities/adr.js";
-import { Task } from "../entities/task.js";
-import { ADRId } from "../value-objects/adr-id.js";
-import { TaskId } from "../value-objects/task-id.js";
+import { ADR } from "../../entities/adr/adr.js";
+import { Task } from "../../entities/task/task.js";
+import { ADRId } from "../../value-objects/adr-id/adr-id.js";
+import { TaskId } from "../../value-objects/task-id/task-id.js";
 import { DAGService } from "./dag.service.js";
 
 function makeTask(

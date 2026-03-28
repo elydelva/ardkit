@@ -1,4 +1,4 @@
-import { InvalidIdError } from "../errors.js";
+import { InvalidIdError } from "../../errors/errors.js";
 
 const ADR_ID_REGEX = /^ADR-\d{4}$/;
 

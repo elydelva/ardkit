@@ -1,5 +1,5 @@
-import { InvalidTransitionError } from "../errors.js";
-import type { ADRStatus, TaskStatus } from "../value-objects/status.js";
+import { InvalidTransitionError } from "../../errors/errors.js";
+import type { ADRStatus, TaskStatus } from "../../value-objects/status/status.js";
 
 const ADR_TRANSITIONS: Record<ADRStatus, ADRStatus[]> = {
   draft: ["proposed", "abandoned"],

@@ -1,8 +1,8 @@
-import type { ADR } from "../entities/adr.js";
-import type { Task } from "../entities/task.js";
-import type { Trace, TraceEvent } from "../entities/trace.js";
-import type { ADRId } from "../value-objects/adr-id.js";
-import type { TaskId } from "../value-objects/task-id.js";
+import type { ADR } from "../../entities/adr/adr.js";
+import type { Task } from "../../entities/task/task.js";
+import type { Trace, TraceEvent } from "../../entities/trace/trace.js";
+import type { ADRId } from "../../value-objects/adr-id/adr-id.js";
+import type { TaskId } from "../../value-objects/task-id/task-id.js";
 
 export interface TraceFilter {
   adrId?: ADRId;

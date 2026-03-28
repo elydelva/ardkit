@@ -1,11 +1,8 @@
-import { Task } from "../entities/task.js";
-import type { CreateTaskParams } from "../entities/task.js";
-import { Trace } from "../entities/trace.js";
-import { ADRNotFoundError } from "../errors.js";
-import type { IGitAdapter } from "../ports/git.adapter.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import { TaskId } from "../value-objects/task-id.js";
-import { TraceId } from "../value-objects/trace-id.js";
+import { Task, Trace } from "../../entities/index.js";
+import type { CreateTaskParams } from "../../entities/index.js";
+import { ADRNotFoundError } from "../../errors/index.js";
+import type { IGitAdapter, IRealmRepository } from "../../ports/index.js";
+import { TaskId, TraceId } from "../../value-objects/index.js";
 
 type CreateTaskInput = Omit<CreateTaskParams, "id"> & {
   actor?: string;

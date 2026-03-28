@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { InvalidTransitionError } from "../errors.js";
+import { InvalidTransitionError } from "../../errors/errors.js";
 import { StateMachineService } from "./state-machine.service.js";
 
 describe("StateMachineService", () => {

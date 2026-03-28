@@ -1,7 +1,7 @@
-import type { ADRId } from "../value-objects/adr-id.js";
-import type { TaskStatus } from "../value-objects/status.js";
-import type { TaskId } from "../value-objects/task-id.js";
-import type { Rule } from "./adr.js";
+import type { ADRId } from "../../value-objects/adr-id/adr-id.js";
+import type { TaskStatus } from "../../value-objects/status/status.js";
+import type { TaskId } from "../../value-objects/task-id/task-id.js";
+import type { Rule } from "../adr/adr.js";
 
 export interface Task {
   id: TaskId;

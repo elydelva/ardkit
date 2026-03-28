@@ -1,5 +1,5 @@
-import type { ADRId } from "../value-objects/adr-id.js";
-import type { ADRStatus } from "../value-objects/status.js";
+import type { ADRId } from "../../value-objects/adr-id/adr-id.js";
+import type { ADRStatus } from "../../value-objects/status/status.js";
 
 export interface Rule {
   trigger: "before_edit" | "after_edit" | "before_complete" | "after_complete" | "on_conflict";

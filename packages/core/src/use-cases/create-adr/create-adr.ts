@@ -1,10 +1,7 @@
-import { ADR } from "../entities/adr.js";
-import type { CreateADRParams } from "../entities/adr.js";
-import { Trace } from "../entities/trace.js";
-import type { IGitAdapter } from "../ports/git.adapter.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import { ADRId } from "../value-objects/adr-id.js";
-import { TraceId } from "../value-objects/trace-id.js";
+import { ADR, Trace } from "../../entities/index.js";
+import type { CreateADRParams } from "../../entities/index.js";
+import type { IGitAdapter, IRealmRepository } from "../../ports/index.js";
+import { ADRId, TraceId } from "../../value-objects/index.js";
 
 type CreateADRInput = Omit<CreateADRParams, "id"> & {
   actor?: string;

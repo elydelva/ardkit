@@ -1,6 +1,6 @@
-import type { ADRId } from "../value-objects/adr-id.js";
-import type { TaskId } from "../value-objects/task-id.js";
-import type { TraceId } from "../value-objects/trace-id.js";
+import type { ADRId } from "../../value-objects/adr-id/adr-id.js";
+import type { TaskId } from "../../value-objects/task-id/task-id.js";
+import type { TraceId } from "../../value-objects/trace-id/trace-id.js";
 
 export type TraceEvent =
   | "adr_created"

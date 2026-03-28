@@ -1,4 +1,4 @@
-import { InvalidIdError } from "../errors.js";
+import { InvalidIdError } from "../../errors/errors.js";
 
 const TASK_ID_REGEX = /^TASK-\d{4}$/;
 

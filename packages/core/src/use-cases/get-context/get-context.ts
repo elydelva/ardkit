@@ -1,8 +1,6 @@
-import type { ADR } from "../entities/adr.js";
-import type { Task } from "../entities/task.js";
-import type { Trace } from "../entities/trace.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import type { ADRId } from "../value-objects/adr-id.js";
+import type { ADR, Task, Trace } from "../../entities/index.js";
+import type { IRealmRepository } from "../../ports/index.js";
+import type { ADRId } from "../../value-objects/index.js";
 
 export interface ContextFilter {
   adrId?: ADRId;

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "bun:test";
-import { InvalidIdError } from "../errors.js";
+import { InvalidIdError } from "../../errors/errors.js";
 import { TraceId } from "./trace-id.js";
 
 describe("TraceId", () => {

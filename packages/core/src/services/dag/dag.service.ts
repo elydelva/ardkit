@@ -1,6 +1,6 @@
-import type { ADR } from "../entities/adr.js";
-import type { Task } from "../entities/task.js";
-import { TaskId } from "../value-objects/task-id.js";
+import type { ADR } from "../../entities/adr/adr.js";
+import type { Task } from "../../entities/task/task.js";
+import { TaskId } from "../../value-objects/task-id/task-id.js";
 
 export class DAGService {
   areGatesCleared(task: Task, allTasks: Task[]): boolean {

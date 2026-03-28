@@ -1,10 +1,8 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { ADR } from "../entities/adr.js";
-import { Task } from "../entities/task.js";
-import type { Trace } from "../entities/trace.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import { ADRId } from "../value-objects/adr-id.js";
-import { TaskId } from "../value-objects/task-id.js";
+import { ADR, Task } from "../../entities/index.js";
+import type { Trace } from "../../entities/index.js";
+import type { IRealmRepository } from "../../ports/index.js";
+import { ADRId, TaskId } from "../../value-objects/index.js";
 import { GetNextUseCase } from "./get-next.js";
 
 function makeInMemoryRepo(adrs: ADR[], tasks: Task[]): IRealmRepository {

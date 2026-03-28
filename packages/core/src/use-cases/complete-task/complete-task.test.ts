@@ -1,12 +1,13 @@
 import { beforeEach, describe, expect, it } from "bun:test";
-import { ADR } from "../entities/adr.js";
-import { Task } from "../entities/task.js";
-import type { Trace } from "../entities/trace.js";
-import { GatesNotClearedError, InvalidTransitionError, TaskNotFoundError } from "../errors.js";
-import type { IRealmRepository } from "../ports/realm.repository.js";
-import { ADRId } from "../value-objects/adr-id.js";
-import { TaskId } from "../value-objects/task-id.js";
-import { TraceId } from "../value-objects/trace-id.js";
+import { ADR, Task } from "../../entities/index.js";
+import type { Trace } from "../../entities/index.js";
+import {
+  GatesNotClearedError,
+  InvalidTransitionError,
+  TaskNotFoundError,
+} from "../../errors/index.js";
+import type { IRealmRepository } from "../../ports/index.js";
+import { ADRId, TaskId, TraceId } from "../../value-objects/index.js";
 import { CompleteTaskUseCase } from "./complete-task.js";
 
 function makeInMemoryRepo(): IRealmRepository & {
