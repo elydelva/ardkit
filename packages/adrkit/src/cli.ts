@@ -1,6 +1,7 @@
 import * as path from "node:path";
 import { Command } from "commander";
 import { runContext } from "./commands/context.js";
+import { runHistory } from "./commands/history.js";
 import { runInit } from "./commands/init.js";
 import { runNew } from "./commands/new.js";
 import { runNext } from "./commands/next.js";
@@ -59,6 +60,29 @@ export function buildCLI(): Command {
       const container = createContainer(getRealmRoot());
       await runNext(container, opts);
     });
+
+  program
+    .command("history")
+    .description("Show audit trail of events")
+    .option("--adr <id>", "Scope to a specific ADR (e.g. ADR-0001)")
+    .option("--task <id>", "Scope to a specific task (e.g. TASK-0001)")
+    .option("--actor <name>", "Filter by actor")
+    .option("--event <event>", "Filter by event type")
+    .option("--since <date>", "Filter events after this date (ISO 8601)")
+    .option("--json", "Machine-readable output")
+    .action(
+      async (opts: {
+        adr?: string;
+        task?: string;
+        actor?: string;
+        event?: string;
+        since?: string;
+        json?: boolean;
+      }) => {
+        const container = createContainer(getRealmRoot());
+        await runHistory(container, opts);
+      }
+    );
 
   const task = program.command("task").description("Manage tasks");
 

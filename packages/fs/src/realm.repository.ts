@@ -15,6 +15,7 @@ import { getState, incrementCounter } from "./config/state.manager.js";
 import { ADRKIT_DIR, MD_EXT, TASKS_DIR, TRACES_DIR } from "./constants.js";
 import { parseADR } from "./parsers/adr.parser.js";
 import { parseTask } from "./parsers/task.parser.js";
+import { parseTrace } from "./parsers/trace.parser.js";
 import { serializeADR } from "./serializers/adr.serializer.js";
 import { serializeTask } from "./serializers/task.serializer.js";
 import { serializeTrace } from "./serializers/trace.serializer.js";
@@ -39,6 +40,16 @@ function taskFilePath(realmRoot: string, adrId: ADRId, taskId: TaskId): string {
 
 function traceFilePath(realmRoot: string, adrId: ADRId, traceId: string): string {
   return path.join(realmRoot, ADRKIT_DIR, adrDirName(adrId), TRACES_DIR, `${traceId}${MD_EXT}`);
+}
+
+function applyTraceFilter(traces: Trace[], filter: TraceFilter): Trace[] {
+  return traces.filter((t) => {
+    if (filter.taskId && !t.taskId?.equals(filter.taskId)) return false;
+    if (filter.actor && t.actor !== filter.actor) return false;
+    if (filter.event && t.event !== filter.event) return false;
+    if (filter.since && t.at < filter.since) return false;
+    return true;
+  });
 }
 
 async function fileExists(filePath: string): Promise<boolean> {
@@ -165,9 +176,34 @@ export class FsRealmRepository implements IRealmRepository {
     }
   }
 
-  // v0.1: traces are written but not queryable
-  async findTraces(_filter: TraceFilter): Promise<Trace[]> {
-    return [];
+  async findTraces(filter: TraceFilter): Promise<Trace[]> {
+    const adrs = filter.adrId
+      ? await this.findADR(filter.adrId).then((a) => (a ? [a] : []))
+      : await this.findAllADRs();
+
+    const traces: Trace[] = [];
+
+    for (const adr of adrs) {
+      const tracesDir = path.join(this.adrKitDir, adr.id.toString(), TRACES_DIR);
+      let entries: string[];
+      try {
+        entries = await fs.readdir(tracesDir);
+      } catch {
+        continue;
+      }
+
+      for (const entry of entries) {
+        if (!entry.endsWith(MD_EXT)) continue;
+        try {
+          const content = await fs.readFile(path.join(tracesDir, entry), "utf-8");
+          traces.push(parseTrace(content, adr.id));
+        } catch {
+          // skip malformed trace files
+        }
+      }
+    }
+
+    return applyTraceFilter(traces, filter);
   }
 
   async getState(): Promise<RealmState> {

@@ -31,8 +31,9 @@ export {
   CompleteTaskUseCase,
   GetNextUseCase,
   GetContextUseCase,
+  GetHistoryUseCase,
 } from "./use-cases/index.js";
-export type { NextResult, ContextFilter, RealmContext } from "./use-cases/index.js";
+export type { NextResult, ContextFilter, RealmContext, HistoryFilter } from "./use-cases/index.js";
 
 // Errors
 export {
