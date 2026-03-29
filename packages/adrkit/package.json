@@ -1,6 +1,6 @@
 {
   "name": "adrkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Decision-first, agent-native project management system for git repositories",
   "type": "module",
   "license": "MIT",
@@ -8,7 +8,14 @@
     "type": "git",
     "url": "git+https://github.com/elydelva/adrkit.git"
   },
-  "keywords": ["adr", "architecture", "decision-record", "cli", "agent", "git"],
+  "keywords": [
+    "adr",
+    "architecture",
+    "decision-record",
+    "cli",
+    "agent",
+    "git"
+  ],
   "bin": {
     "adrkit": "./dist/index.js"
   },
@@ -19,7 +26,10 @@
     "clean": "rm -rf dist && rm -f tsconfig.tsbuildinfo",
     "prepublishOnly": "bun run typecheck && bun run build && bun test"
   },
-  "files": ["dist", "README.md"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "publishConfig": {
     "access": "public"
   },
