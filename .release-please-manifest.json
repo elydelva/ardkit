@@ -1,9 +1,9 @@
 {
-  "packages/core": "0.1.0",
-  "packages/fs": "0.1.0",
-  "packages/git": "0.1.0",
-  "packages/lint": "0.1.0",
-  "packages/tui": "0.1.0",
-  "packages/sync": "0.1.0",
-  "packages/adrkit": "0.1.0"
+  "packages/core": "0.2.0",
+  "packages/fs": "0.2.0",
+  "packages/git": "0.2.0",
+  "packages/lint": "0.2.0",
+  "packages/tui": "0.2.0",
+  "packages/sync": "0.2.0",
+  "packages/adrkit": "0.2.0"
 }
